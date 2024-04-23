@@ -1,0 +1,40 @@
+body {
+    font-family: 'Press Start 2P';
+    background-color: #d3d3d3;
+}
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    padding: 20px 0 0;
+}
+.character-selection-container {
+    text-align: center;
+    margin: 100px auto;
+}
+
+.characters {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.character {
+    text-align: center;
+}
+
+.character-image {
+    width: 150px;
+    height: 150px;
+    transition: transform 0.3s;
+}
+
+.character-image:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.character-name {
+    margin-top: 10px;
+    font-weight: bold;
+}
