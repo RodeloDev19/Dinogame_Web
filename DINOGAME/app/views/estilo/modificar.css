@@ -1,0 +1,64 @@
+body {
+    font-family: 'Press Start 2P';
+    background-color: #d3d3d3;
+}
+.modify-container {
+    width: 500px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    padding: 20px 0 0;
+}
+h2 {
+    text-align: center;
+    font-size: 22px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+div {
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 100%;
+}
+
+button {
+    padding: 10px;
+    background-color: #d3d3d3;
+    color: black;
+    margin: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: gray;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    display: none;
+}
+
+.buttons {
+    justify-content: center;
+    display: flex;
+}
+
