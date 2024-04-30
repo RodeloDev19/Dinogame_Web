@@ -3,11 +3,12 @@ console.log('Login controller loaded');
 document.addEventListener("DOMContentLoaded", () => {
     let boton_login = document.querySelector('#boton_login');
 
-    boton_login.addEventListener('click', () => {
+    boton_login.addEventListener('click', (event) => {
+        event.preventDefault();
         console.log('Login button clicked');
         validarLogin();
     });
-});
+})
 
 function validarLogin() {
     let xhr = new XMLHttpRequest();
@@ -28,7 +29,8 @@ function validarLogin() {
         if (xhr.status != 200) {
             alert(xhr.status + ': ' + xhr.statusText);
         } else {
-            let response = JSON.parse(xhr.responseText);
+            let response = (xhr.responseText);
+            console.log(response);
         }
     };
-};
+}

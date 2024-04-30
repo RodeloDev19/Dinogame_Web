@@ -3,6 +3,10 @@ const path = require('path');
 
 const router = express.Router();
 
+const login = require("../routes/login");
+
+router.use('/login', login);
+
 router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../views/index.html")));
 router.get('/index', (req, res) => res.sendFile(path.resolve(__dirname + "/../views/index.html")));
 router.get('/login', (req, res) => res.sendFile(path.resolve(__dirname + "/../views/login.html")));
