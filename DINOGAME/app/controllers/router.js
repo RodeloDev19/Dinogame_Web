@@ -4,8 +4,14 @@ const path = require('path');
 const router = express.Router();
 
 const login = require("../routes/login");
+const register = require("../routes/register");
+const modificar = require("../routes/modificar");
+const leaderboard = require("../routes/leaderboard");
 
 router.use('/login', login);
+router.use('/register', register);
+router.use('/modificar', modificar);
+router.use('/leaderboard', leaderboard);
 
 router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../views/index.html")));
 router.get('/index', (req, res) => res.sendFile(path.resolve(__dirname + "/../views/index.html")));

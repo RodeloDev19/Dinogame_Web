@@ -1,21 +1,22 @@
-console.log('Login controller loaded');
+console.log('Register controller loaded');
 
 document.addEventListener("DOMContentLoaded", () => {
-    let boton_login = document.querySelector('#boton_login');
+    let boton_register = document.querySelector('#boton_register');
 
-    boton_login.addEventListener('click', (event) => {
+    boton_register.addEventListener('click', (event) => {
         event.preventDefault();
-        validarLogin();
+        registrarUsuario();
     });
 })
 
-function validarLogin() {
+function registrarUsuario() {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:3000/login/validate', true);
+    xhr.open('POST', 'http://localhost:3000/register/newUser', true);
 
     xhr.setRequestHeader('Content-type', 'application/json');
 
     let data = {
+        name: document.querySelector('#name').value,
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value
     };

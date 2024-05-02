@@ -1,21 +1,22 @@
-console.log('Login controller loaded');
+console.log('Modificar controller loaded');
 
 document.addEventListener("DOMContentLoaded", () => {
-    let boton_login = document.querySelector('#boton_login');
+    let boton_mod = document.querySelector('#boton_mod');
 
-    boton_login.addEventListener('click', (event) => {
+    boton_mod.addEventListener('click', (event) => {
         event.preventDefault();
-        validarLogin();
+        registrarUsuario();
     });
 })
 
-function validarLogin() {
+function registrarUsuario() {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:3000/login/validate', true);
+    xhr.open('PUT', 'http://localhost:3000/modificar/changeUser', true);
 
     xhr.setRequestHeader('Content-type', 'application/json');
 
     let data = {
+        name: document.querySelector('#name').value,
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value
     };
@@ -30,7 +31,6 @@ function validarLogin() {
         } else {
             let response = (xhr.responseText);
             console.log(response);
-            window.location.href = '/leaderboard';
         }
     };
 }

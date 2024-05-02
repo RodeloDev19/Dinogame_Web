@@ -1,21 +1,29 @@
-const mongoose = require('mongoose');
-const mongoConnection = "mongodb+srv://admin:admin@myapp.1xkqgcy.mongodb.net/";
-const db = mongoose.connection;
+const {User} = require('./mongodb');
+const bcrypt = require('bcryptjs'); // Asegúrate de instalar bcryptjs con npm install bcryptjs
 
-const connect = (req, res) => {
-    db.on('connecting', () => {
-        console.log("Conectando...");
-        console.log(mongoose.connection.readyState); //State 2: Connecting.
-    });
-    
-    db.on('connected', () => {
-        console.log('Conectado exitosamente!');
-        console.log(mongoose.connection.readyState); //State 1: Connected.
-    });
-    
-    mongoose.connect(mongoConnection, {useNewUrlParser: true});
+const validateUser = (req, res) => {
+    let { username, password } = req.body;
 
-    res.status(200).send('Conexion exitosa!');
+    User.findOne({ username: username })
+        .then(user => {
+            if (user) {
+                // Verifica la contraseña
+                bcrypt.compare(password, user.password, function(err, result) {
+                    if (result) {
+                        res.send('Login exitoso');
+                        console.log('Usuario autenticado: ', user);
+                    } else {
+                        res.status(401).send('Contraseña incorrecta');
+                    }
+                });
+            } else {
+                res.status(404).send('Usuario no encontrado');
+            }
+        })
+        .catch(err => {
+            console.error('Error durante la autenticación', err);
+            res.status(500).send('Error interno del servidor');
+        });
 };
 
-module.exports = {connect};
+module.exports = {validateUser};

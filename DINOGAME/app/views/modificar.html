@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <script src="/views/controllers/modificar.js"></script>
         <title>MODIFICAR</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
@@ -25,7 +26,7 @@
             <!-- place navbar here -->
         </header>
         <main>
-            <h1>DINOGAME</h1>
+            <a href="index"><h1>DINOGAME</h1></a>
             <div class="modify-container">
                 <h2>Modificar perfil</h2>
                 <form id="modify-form">
@@ -42,7 +43,7 @@
                         <input type="password" id="password" name="password" required>
                     </div>
                     <div class="buttons">
-                        <button type="submit">Guardar</button>
+                        <button id="boton_mod" type="submit">Guardar</button>
                         <button type="submit">Cancelar</button>
                     </div>
                 </form>
