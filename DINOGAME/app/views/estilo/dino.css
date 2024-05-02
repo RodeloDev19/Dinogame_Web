@@ -31,3 +31,47 @@ button:hover {
 .buttons {
     display: flex;
 }
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+input[type="range"] {
+    -webkit-appearance: none; /* Quitar el estilo por defecto */
+    width: 30%; /* Ancho del control */
+    border-radius: 10px;
+    background: linear-gradient(to right, gray 0%, #ffffff 0%); /* Riel con degradado */
+  }
+  
+  /* Estilo del riel */
+  input[type="range"]::-webkit-slider-runnable-track {
+    background: transparent; /* El color del riel se controla por el degradado */
+    border-radius: 5px;
+    height: 10px;
+  }
+  
+  /* Estilo del control deslizante */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Quitar el estilo por defecto */
+    background: gray; /* Color del control deslizante */
+    border-radius: 50%; /* Forma redonda */
+    width: 25px; /* Ancho del control deslizante */
+    height: 25px; /* Altura del control deslizante */
+    bottom: 7.5px;
+    position: relative;
+  }
+  
+  input[type="submit"] {
+    padding: 10px;
+    font-family: 'Press Start 2P';
+    background-color: #d3d3d3;
+    color: black;
+    margin: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background-color: gray;
+  }

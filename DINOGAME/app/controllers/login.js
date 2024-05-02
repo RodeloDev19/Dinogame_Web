@@ -1,21 +1,15 @@
-const mongoose = require('mongoose');
-const mongoConnection = "mongodb+srv://admin:admin@myapp.1xkqgcy.mongodb.net/";
-const db = mongoose.connection;
+const {User} = require('./mongodb');
 
-const connect = (req, res) => {
-    db.on('connecting', () => {
-        console.log("Conectando...");
-        console.log(mongoose.connection.readyState); //State 2: Connecting.
-    });
-    
-    db.on('connected', () => {
-        console.log('Conectado exitosamente!');
-        console.log(mongoose.connection.readyState); //State 1: Connected.
-    });
-    
-    mongoose.connect(mongoConnection, {useNewUrlParser: true});
+const validateUser = (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
 
-    res.status(200).send('Conexion exitosa!');
+    User.find({
+        username: {$eq: username}
+    }).then(function (doc) {
+        res.send('Usuario encontrado: ' + doc);
+        console.log(doc);
+    }).catch((err) => console.log(err));
 };
 
-module.exports = {connect};
+module.exports = {validateUser};
