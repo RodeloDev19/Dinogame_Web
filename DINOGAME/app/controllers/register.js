@@ -1,17 +1,32 @@
 const {User} = require('./mongodb');
+const bcrypt = require('bcryptjs');
 
 const registerUser = (req, res) => {
-    let newUser = {
-        name: req.body.name,
-        username: req.body.username,
-        password: req.body.password
-    };
+    const { name, username, password } = req.body;
 
-    let user = User(newUser);
+    // Genera un 'salt' y luego hashea la contraseña
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) {
+            return res.status(500).send('Error al generar salt');
+        }
 
-    user.save().then((doc) => {
-        res.send('Usuario creado exitosamente: ' + doc);
-    }).catch((err) => console.log(err));
+        bcrypt.hash(password, salt, (err, hashedPassword) => {
+            if (err) {
+                return res.status(500).send('Error al hashear la contraseña');
+            }
+
+            // Aquí guardarías el usuario en la base de datos
+            const newUser = new User({
+                name: name,
+                username: username,
+                password: hashedPassword // Guarda la contraseña hasheada
+            });
+
+            newUser.save()
+                .then(user => res.send('Usuario registrado con éxito'))
+                .catch(err => res.status(500).send('Error al guardar el usuario'));
+        });
+    });
 };
 
-module.exports = {registerUser};
+module.exports = { registerUser };

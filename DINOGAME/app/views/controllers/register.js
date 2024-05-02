@@ -31,7 +31,7 @@ function registrarUsuario() {
         } else {
             let response = (xhr.responseText);
             console.log(response);
-            window.location.href = '/login';
+            window.location.href = '/leaderboard';
         }
     };
 }

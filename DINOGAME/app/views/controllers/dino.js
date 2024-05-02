@@ -226,6 +226,7 @@ function update() {
         context.drawImage(gameOverImg, (boardWidth - gameOverImg.width) / 2, (boardHeight - gameOverImg.height) / 2);
         context.drawImage(resetImg, (boardWidth - resetImg.width) / 2, (boardHeight - resetImg.height) / 2 + 50);
     }
+    
 }
 
 // Maneja el reinicio del juego cuando el usuario presiona la tecla de espacio
