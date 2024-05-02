@@ -9,15 +9,20 @@
         <script src="/views/controllers/dino.js"></script>
     </head>
     <body>
-        <h1>DINOGAME</h1>
+        <a href="index"><h1>DINOGAME</h1></a>
         <canvas id="board"></canvas>
         <div class="buttons">
             <form action="login">
-                <button id="boton_login" type="submit">Iniciar sesión</button>
+                <button type="submit">Iniciar sesión</button>
             </form>
             <form action="characters">
                 <button type="submit">Cambiar personaje</button>
             </form>
         </div>
+        <form id="speedForm" action="/action_page.php" method="get">
+            <label for="vol">Dificultad (velocidad desde 10 a 50): <p id="sliderValue">10</p></label>
+            <input type="range" min="10" max="50" id="slider" step="10" value="10">
+            <input type="submit" value="Aplicar" formaction="index">
+        </form>
     </body>
 </html>

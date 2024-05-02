@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {connect} = require('../controllers/login');
-//const {ShoppingCart, checkCarrito} = require('../controllers/shopping_cart');
+const {validateUser} = require('../controllers/login');
 
-router.post('/validate', connect);
+router.post('/validate', validateUser);
 
 module.exports = router;

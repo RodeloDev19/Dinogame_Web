@@ -81,11 +81,36 @@ window.onload = function() {
     // context.fillStyle="green";
     // context.fillRect(dino.x, dino.y, dino.width, dino.height);
 
-    dinoImg = new Image();
-    dinoImg.src = "/views/imgs/dino.png";
+    // Obtener el personaje seleccionado
+    const selectedCharacter = sessionStorage.getItem("selectedCharacter");
+
+    // Cambiar la imagen del dinosaurio según el personaje seleccionado
+    switch (selectedCharacter) {
+        case "T-REX":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/trex-removebg-preview.png";
+            break;
+        case "T-MEX":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/tmex-removebg-preview.png";
+            break;
+        case "T-RED":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/tred-removebg-preview.png";
+            break;
+        case "T-SHERLOCK":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/tsherlock-removebg-preview.png";
+            break;
+        default:
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/dino.png"; // Default image if nothing is selected
+            break;
+    }
+
     dinoImg.onload = function() {
         context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
-    }
+    };
 
     cactus1Img = new Image();
     cactus1Img.src = "/views/imgs/cactus1.png";
@@ -129,11 +154,17 @@ window.onload = function() {
     document.addEventListener("keydown", moveDino);
 }
 
+let animationFrameId = null; // Variable global para almacenar el ID del frame de animación
+
 function update() {
-    requestAnimationFrame(update);
-    if (gameOver) {
-        return;
+    // Cancelar el frame anterior para asegurar que no se acumulen llamadas
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
     }
+    
+    // Solicitar un nuevo frame de animación
+    animationFrameId = requestAnimationFrame(update);
+
     context.clearRect(0, 0, board.width, board.height);
 
     // Draw track
@@ -191,6 +222,7 @@ function update() {
 
     if (gameOver) {
         // Draw game over and reset images
+        cancelAnimationFrame(animationFrameId);
         context.drawImage(gameOverImg, (boardWidth - gameOverImg.width) / 2, (boardHeight - gameOverImg.height) / 2);
         context.drawImage(resetImg, (boardWidth - resetImg.width) / 2, (boardHeight - resetImg.height) / 2 + 50);
     }
@@ -198,8 +230,10 @@ function update() {
 
 // Maneja el reinicio del juego cuando el usuario presiona la tecla de espacio
 document.addEventListener("keydown", function(e) {
-    if (gameOver && e.code === "Space") {
-        resetGame();
+    if (!gameOver && (e.code === "Space" || e.code === "ArrowUp")) {
+        moveDino(e); // Esto hace que el dinosaurio salte
+    } else if (gameOver && e.code === "Space") {
+        resetGame(); // Esto reinicia el juego
     }
 });
 
@@ -209,8 +243,17 @@ function resetGame() {
     gameOver = false;
     score = 0;
 
+     // Reiniciar la velocidad del juego usando sessionStorage
+    const storedSpeed = sessionStorage.getItem("gameSpeed");
+    if (storedSpeed) {
+        const speed = parseInt(storedSpeed);
+        velocityX = -((speed - 10) * 0.5 + 6); // Ajustar la velocidad del juego según el nivel
+    } else {
+        velocityX = -8; // Velocidad por defecto si no hay valor almacenado
+    }
+
+
     // Reiniciar la velocidad
-    velocityX = -8; // Restaura la velocidad horizontal inicial
     velocityY = 0; // Velocidad vertical inicial
     gravity = 0.4; // Gravedad inicial
 
@@ -230,8 +273,31 @@ function resetGame() {
     dinoHeight = originalDinoHeight;
     dino.y = originalDinoY;
 
-    // Restablecer el dinosaurio a la imagen original
-    dinoImg.src = "/views/imgs/dino.png";
+    const selectedCharacter = sessionStorage.getItem("selectedCharacter");
+
+    switch (selectedCharacter) {
+        case "T-REX":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/trex-removebg-preview.png";
+            break;
+        case "T-MEX":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/tmex-removebg-preview.png";
+            break;
+        case "T-RED":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/tred-removebg-preview.png";
+            break;
+        case "T-SHERLOCK":
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/tsherlock-removebg-preview.png";
+            break;
+        default:
+            dinoImg = new Image();
+            dinoImg.src = "/views/imgs/dino.png"; // Default character
+            break;
+    }
+    
     dinoImg.onload = function() {
         context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
     };
@@ -376,4 +442,40 @@ function detectCollision(a, b) {
            a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
            a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
            a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+}
+
+//Se encarga del input range, para la dificultad
+document.addEventListener("DOMContentLoaded", function() {
+    const slider = document.getElementById("slider"); // Referencia al control deslizante
+    const sliderValue = document.getElementById("sliderValue"); // Referencia al párrafo
+    const speedForm = document.getElementById("speedForm"); // Referencia al formulario
+
+    slider.addEventListener("input", function() {
+        sliderValue.textContent = slider.value; // Actualizar el contenido del párrafo
+        const value = slider.value; // Obtiene el valor del control deslizante
+        sliderValue.textContent = value; // Actualiza el contenido del párrafo
+
+        // Ajustar el color del riel y del thumb según el valor del control deslizante
+        const percentage = ((value - 10) / 40) * 100; // Calcular porcentaje relativo
+        slider.style.background = `linear-gradient(to right, gray ${percentage}%, #ffffff ${percentage}%)`;
+    });
+
+    speedForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const speed = slider.value; // Obtiene el valor del control deslizante
+        sessionStorage.setItem("gameSpeed", speed); // Guarda la velocidad en sessionStorage
+
+        // Reiniciar el juego con la nueva velocidad
+        resetGameWithSpeed(speed);
+    });
+});
+
+// Función para reiniciar el juego con la velocidad dada
+function resetGameWithSpeed(speed) {
+    const speedValue = parseInt(speed);
+    // Ajustar `velocityX` para que sea más rápido a mayor dificultad
+    velocityX = -((speedValue - 10) * 0.5 + 6);
+
+    // Luego, llama a `resetGame` para reiniciar el juego con la nueva velocidad
+    resetGame();
 }

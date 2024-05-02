@@ -4,8 +4,12 @@ const path = require('path');
 const router = express.Router();
 
 const login = require("../routes/login");
+const register = require("../routes/register");
+const modificar = require("../routes/modificar");
 
 router.use('/login', login);
+router.use('/register', register);
+router.use('/modificar', modificar);
 
 router.get('/', (req, res) => res.sendFile(path.resolve(__dirname + "/../views/index.html")));
 router.get('/index', (req, res) => res.sendFile(path.resolve(__dirname + "/../views/index.html")));

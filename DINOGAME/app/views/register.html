@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <script src="/views/controllers/register.js"></script>
         <title>REGISTER</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
@@ -25,10 +26,14 @@
             <!-- place navbar here -->
         </header>
         <main>
-            <h1>DINOGAME</h1>
+            <a href="index"><h1>DINOGAME</h1></a>
             <div class="login-container">
                 <h2>Crear Cuenta</h2>
-                <form id="login-form">
+                <form id="register-form">
+                    <div>
+                        <label for="name">Nombre:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
                     <div>
                         <label for="username">Usuario:</label>
                         <input type="text" id="username" name="username" required>
@@ -37,10 +42,10 @@
                         <label for="password">Contraseña:</label>
                         <input type="password" id="password" name="password" required>
                     </div>
-                    <button type="submit">Regístrate</button>
+                    <button id="boton_register" type="submit">Regístrate</button>
                 </form>
                 <div id="error-message" class="error-message"></div>
-                <a href="login">¿Ya tienes cuenta? Inicia sesión</a>
+                <a href="login" class="link">¿Ya tienes cuenta? Inicia sesión</a>
             </div>
         </main>
         <footer>
