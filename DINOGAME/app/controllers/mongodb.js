@@ -23,6 +23,23 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model('users', userSchema);
+const userPlaythroughs = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    highScore: {
+        type: Number,
+        default: 0
+    },
+    scores: [{        
+        score: Number,
+        date: { type: Date, default: Date.now }
+    }]
+});
 
-module.exports = {User};
+const User = mongoose.model('users', userSchema);
+const UserPlays = mongoose.model('userScores', userPlaythroughs);
+
+module.exports = {User, UserPlays};

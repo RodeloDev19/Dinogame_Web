@@ -2,7 +2,6 @@ console.log('Modificar controller loaded');
 
 document.addEventListener("DOMContentLoaded", () => {
     let boton_mod = document.querySelector('#boton_mod');
-
     boton_mod.addEventListener('click', (event) => {
         event.preventDefault();
         registrarUsuario();

@@ -14,7 +14,6 @@ function validarLogin() {
     xhr.open('POST', 'http://localhost:3000/login/validate', true);
 
     xhr.setRequestHeader('Content-type', 'application/json');
-
     let data = {
         username: document.querySelector('#username').value,
         password: document.querySelector('#password').value
@@ -26,11 +25,18 @@ function validarLogin() {
 
     xhr.onload = () => {
         if (xhr.status != 200) {
-            alert(xhr.status + ': ' + xhr.statusText);
+            document.getElementById('error-message').textContent = xhr.responseText;
         } else {
-            let response = (xhr.responseText);
-            console.log(response);
-            window.location.href = '/leaderboard';
+            const response = (xhr.responseText);
+            const data = JSON.parse(response);
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem("username", data.username);
+            window.location.href = '/index';
         }
+    };
+
+    xhr.onerror = () => {
+        // Manejo de errores de red u otros errores técnicos
+        document.getElementById('error-message').textContent = 'Error en la conexión con el servidor';
     };
 }

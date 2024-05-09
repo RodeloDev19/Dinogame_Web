@@ -225,8 +225,21 @@ function update() {
         cancelAnimationFrame(animationFrameId);
         context.drawImage(gameOverImg, (boardWidth - gameOverImg.width) / 2, (boardHeight - gameOverImg.height) / 2);
         context.drawImage(resetImg, (boardWidth - resetImg.width) / 2, (boardHeight - resetImg.height) / 2 + 50);
+
+        function gameOverFunction() {
+            fetch('/update-score', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: sessionStorage.getItem("username"), score: score })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    gameOverFunction();
     }
-    
 }
 
 // Maneja el reinicio del juego cuando el usuario presiona la tecla de espacio
@@ -279,7 +292,7 @@ function resetGame() {
     switch (selectedCharacter) {
         case "T-REX":
             dinoImg = new Image();
-            dinoImg.src = "/views/imgs/trex-removebg-preview.png";
+            dinoImg.src = "/views/imgs/dino.png";
             break;
         case "T-MEX":
             dinoImg = new Image();
@@ -358,12 +371,12 @@ function placeCactus() {
 
     //place cactus
     let cactus = {
-        img : null,
-        x : cactusX,
-        y : cactusY,
-        width : null,
+        img: null,
+        x: cactusX,
+        y: cactusY,
+        width: null,
         height: cactusHeight
-    }
+    };
 
     let placeCactusChance = Math.random(); //0 - 0.9999...
 
@@ -408,33 +421,32 @@ function placeCactus() {
         }
     }
 
-    // Coloca pájaros si el puntaje es mayor a 1200
     if (score > 1200) {
-        let placeBirdChance = Math.random(); // Probabilidad de colocar un pájaro
+        let lastCactus = cactusArray[cactusArray.length - 1];
+        let birdSpace = 250; // Distancia fija entre el último cactus y el pájaro
+        let birdX = lastCactus.x + lastCactus.width + birdSpace; // Colocar pájaro 200px después del último cactus
 
-        // Si la probabilidad es mayor a 0.5, coloca un pájaro
+        let placeBirdChance = Math.random();
         if (placeBirdChance > 0.5) {
             let bird = {
                 img: null,
-                x: boardWidth, // Aparece al final del tablero
-                y: Math.random() < 0.5 ? dinoY : dinoY - 50, // Altura del pájaro según la probabilidad
-                width: 50, // Ancho del pájaro
-                height: bird1Height // Altura del pájaro 1
+                x: birdX,
+                y: Math.random() < 0.5 ? dinoY : dinoY - 50,
+                width: 50,
+                height: bird1Height
             };
 
-            // Selecciona aleatoriamente entre bird1 y bird2
             bird.img = Math.random() < 0.5 ? bird1Img : bird2Img;
-            bird.x = cactusX + 200;
             birdArray.push(bird);
         }
     }
 
     if (cactusArray.length > 5) {
-        cactusArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
+        cactusArray.shift(); // Remueve el primer elemento si hay más de 5
     }
 
     if (birdArray.length > 5) {
-        birdArray.shift(); //remove the first element from the array so that the array doesn't constantly grow
+        birdArray.shift(); // Remueve el primer elemento si hay más de 5
     }
 }
 
@@ -480,3 +492,39 @@ function resetGameWithSpeed(speed) {
     // Luego, llama a `resetGame` para reiniciar el juego con la nueva velocidad
     resetGame();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const loginButton = document.getElementById('login-button');
+    const viewLeaderboardBtn = document.getElementById('view_leaderboard_btn');
+    const viewGamesBtn = document.getElementById('view_games_btn');
+    const token = sessionStorage.getItem('token');
+
+    function updateUIForLoggedIn() {
+        loginButton.textContent = 'Cerrar sesión';
+        loginButton.onclick = handleLogout;
+        viewLeaderboardBtn.style.display = 'block';
+        viewGamesBtn.style.display = 'block';
+    }
+
+    function updateUIForLoggedOut() {
+        loginButton.textContent = 'Iniciar sesión';
+        loginButton.onclick = () => window.location.href = '/login';
+        viewLeaderboardBtn.style.display = 'none';
+        viewGamesBtn.style.display = 'none';
+        resetGame();
+    }
+
+    function handleLogout(event) {
+        event.preventDefault();
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('username');
+        updateUIForLoggedOut();
+    }
+
+    if (token) {
+        updateUIForLoggedIn();
+    } else {
+        updateUIForLoggedOut();
+    }
+});
+

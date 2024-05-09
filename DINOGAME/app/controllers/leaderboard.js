@@ -1,33 +1,29 @@
-const { User } = require('./mongodb');
+const { User, UserPlays } = require('./mongodb');
 
-const updateScores = () => {
-    User.find({})  // Encuentra todos los usuarios
-        .then(users => {
-            users.forEach(user => {
-                const randomScore = Math.floor(Math.random() * 1001);  // Genera un puntaje aleatorio entre 0 y 1000
-                User.findByIdAndUpdate(user._id, { highScore: randomScore }, { new: true })  // Actualiza el puntaje máximo
-                    .then(updatedUser => {
-                        console.log(`Puntaje actualizado para ${updatedUser.username}: ${updatedUser.highScore}`);
-                    })
-                    .catch(err => console.log(`Error al actualizar el usuario ${user.username}:`, err));
-            });
-        })
-        .catch(err => {
-            console.log('Error al encontrar usuarios:', err);
-        });
-};
+const getLeaderboard = async (req, res) => {
+    try {
+        // Fetch all users sorted by highScore in descending order
+        const users = await User.find({}).sort({ highScore: -1 });
 
-updateScores();
+        // Bulk insert/update into UserPlays
+        const bulkOps = users.map(user => ({
+            updateOne: {
+                filter: { username: user.username },
+                update: { $set: { username: user.username, highScore: user.highScore }},
+                upsert: true
+            }
+        }));
 
-const getLeaderboard = (req, res) => {
-    User.find({}).sort({ highScore: -1 })  // Ordena los usuarios por el puntaje de mayor a menor
-        .then(users => {
-            res.json(users);  // Envía la lista de usuarios al cliente
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send('Error al obtener el leaderboard');
-        });
+        await UserPlays.bulkWrite(bulkOps);
+
+        // Now fetch from UserPlays to send to the client
+        const leaderboard = await UserPlays.find({}).sort({ highScore: -1 });
+
+        res.json(leaderboard);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Error al obtener el leaderboard');
+    }
 };
 
 module.exports = { getLeaderboard };

@@ -29,9 +29,11 @@ function registrarUsuario() {
         if (xhr.status != 200) {
             alert(xhr.status + ': ' + xhr.statusText);
         } else {
-            let response = (xhr.responseText);
-            console.log(response);
-            window.location.href = '/leaderboard';
+            const response = (xhr.responseText);
+            const data = JSON.parse(response);
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem("username", data.username);
+            window.location.href = '/index';
         }
     };
 }
