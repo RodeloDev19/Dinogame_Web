@@ -1,5 +1,8 @@
 const {User} = require('./mongodb');
-const bcrypt = require('bcryptjs'); // Asegúrate de instalar bcryptjs con npm install bcryptjs
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const secretKey = 'mi_llave_fresona'; 
 
 const validateUser = (req, res) => {
     let { username, password } = req.body;
@@ -7,11 +10,12 @@ const validateUser = (req, res) => {
     User.findOne({ username: username })
         .then(user => {
             if (user) {
-                // Verifica la contraseña
                 bcrypt.compare(password, user.password, function(err, result) {
                     if (result) {
-                        res.send('Login exitoso');
-                        console.log('Usuario autenticado: ', user);
+                        // Si la contraseña coincide, generamos el token
+                        const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+                        // Enviamos el token y el username al cliente
+                        res.json({ token: token, username: username, message: 'Login exitoso' });
                     } else {
                         res.status(401).send('Contraseña incorrecta');
                     }

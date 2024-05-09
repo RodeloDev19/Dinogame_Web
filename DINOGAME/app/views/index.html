@@ -6,17 +6,19 @@
         <title>DINOGAME</title>
         <link rel="stylesheet" href="/views/estilo/dino.css">
         <link href='https://fonts.googleapis.com/css?family=Press Start 2P' rel='stylesheet'>
-        <script src="/views/controllers/dino.js"></script>
     </head>
     <body>
         <a href="index"><h1>DINOGAME</h1></a>
         <canvas id="board"></canvas>
         <div class="buttons">
             <form action="login">
-                <button type="submit">Iniciar sesión</button>
+                <button id="login-button">Iniciar sesión</button>
             </form>
             <form action="characters">
-                <button type="submit">Cambiar personaje</button>
+                <button>Cambiar personaje</button>
+            </form>
+            <form action="leaderboard">
+                <button id="view_leaderboard_btn">Leaderboard</button>
             </form>
         </div>
         <form id="speedForm" action="/action_page.php" method="get">
@@ -24,5 +26,9 @@
             <input type="range" min="10" max="50" id="slider" step="10" value="10">
             <input type="submit" value="Aplicar" formaction="index">
         </form>
+        <form action="games">
+            <button id="view_games_btn">Ver partidas</button>
+        </form>
+        <script src="/views/controllers/dino.js"></script>
     </body>
 </html>

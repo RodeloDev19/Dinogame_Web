@@ -75,3 +75,7 @@ input[type="range"] {
   input[type="submit"]:hover {
     background-color: gray;
   }
+
+  #view_games_btn, #view_leaderboard_btn {
+    display: none;
+  }

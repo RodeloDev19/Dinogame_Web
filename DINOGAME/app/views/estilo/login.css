@@ -54,7 +54,6 @@ button:hover {
 .error-message {
     color: red;
     text-align: center;
-    display: none;
 }
 
 .link {
